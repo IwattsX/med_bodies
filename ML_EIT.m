@@ -8,6 +8,7 @@
 clear, close all
 format long;
 %%
+for i=1:10
 body.rc = 0.15; %0.15; % radius of the circle (m)
 body.el = 0.02;
 % Create geometry of boundary
@@ -44,3 +45,4 @@ outArea= 0.07; %.007;
 sig0_fine = outArea.*ones(nodes1,1); % homogeneous conductivity
 sig0_coarse = outArea.*ones(nodes,1); % homogeneous conductivity
 figure;pdeplot(p1,e1,t1,'xydata',sigTrue1,'mesh','off');colormap(jet)
+end
