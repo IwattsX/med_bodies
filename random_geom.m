@@ -1,4 +1,4 @@
-function [sigTrue,sigTrue1] = geom5(p,p1,inArea,outArea,body)
+function [sigTrue,sigTrue1] = random_geom(p,p1,inArea,outArea,body)
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 % Computes True conductivity distribution
 % inside the daomain
@@ -21,10 +21,10 @@ el = body.el;
 
 % center1 = [0.115*cos(pi/3) 0.115*sin(pi/3)];
 % center2 = [0.115*cos(pi+pi/4) 0.115*sin(pi+pi/4)];
-radius = el/.95 % current experiment
+radius = rand*el/.95 % size of the inclusion
 
 
-r = rand * (rc - radius); % Random distance from the center, ensuring the small circle stays within the larger one
+r = rand * (rc - radius)*0.9; % Random distance from the center, ensuring the small circle stays within the larger one
 theta = rand * 2 * pi; % Random angle
 x_random = r * cos(theta); % X-coordinate of the random center
 y_random = r * sin(theta); % Y-coordinate of the random center

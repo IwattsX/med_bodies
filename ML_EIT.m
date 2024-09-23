@@ -8,6 +8,7 @@
 clear, close all
 format long;
 %%
+
 body.rc = 0.15; %0.15; % radius of the circle (m)
 body.el = 0.02;
 % Create geometry of boundary
@@ -40,7 +41,19 @@ inArea= 0.3; %0.03; %resistive 1e-8; color values (random)
 outArea= 0.07; %.007;
 
 %% Conductivity distribution
-[sigTrue,sigTrue1] = geom5(p,p1,inArea,outArea,body);
-sig0_fine = outArea.*ones(nodes1,1); % homogeneous conductivity
-sig0_coarse = outArea.*ones(nodes,1); % homogeneous conductivity
-figure;pdeplot(p1,e1,t1,'xydata',sigTrue1,'mesh','off');colormap(jet)
+N = 10;
+sig_data = zeros(N,nodes1);
+for i = 1:N
+[sigTrue,sigTrue1] = random_geom(p,p1,inArea,outArea,body);
+sig_data(i,:) = sigTrue1;
+% sig0_fine = outArea.*ones(nodes1,1); % homogeneous conductivity
+% sig0_coarse = outArea.*ones(nodes,1); % homogeneous conductivity
+% figure;pdeplot(p1,e1,t1,'xydata',sigTrue1,'mesh','off');colormap(jet);pause
+% close all;
+end
+%%
+single_data.sig = sig_data;
+
+save('sig_data.mat',"sig_data")
+%%
+load('sig_data.mat')
