@@ -29,7 +29,9 @@ nodes=length(p);
 % Values
 p1=p1*body.rc;
 p=p*body.rc;
-
+body.NumSrc = 32;
+body.npat = 31;
+body.zl = 1.2;
 nodes1=length(p1);
 tris=length(t1);
 
@@ -57,3 +59,11 @@ single_data.sig = sig_data;
 save('sig_data.mat',"sig_data")
 %%
 load('sig_data.mat')
+Ic = trig_current(body,0.2); % input current
+
+sigTrue1 = sig_data(1,:);
+
+
+
+
+[U,~,~] = fwd_solver_eit2D(p1,e1,t1,sigTrue1',Ic,body);
