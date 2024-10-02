@@ -63,7 +63,7 @@ Ic = trig_current(body,0.2); % input current
 
 sigTrue1 = sig_data(1,:);
 
-
-
+tic
 
 [U,~,~] = fwd_solver_eit2D(p1,e1,t1,sigTrue1',Ic,body);
+toc
