@@ -57,13 +57,22 @@ end
 single_data.sig = sig_data;
 
 save('sig_data.mat',"sig_data")
-%%
 load('sig_data.mat')
+%%
+
+%%
+voltage_data = zeros(N,992);
+for i = 1:N
 Ic = trig_current(body,0.2); % input current
 
-sigTrue1 = sig_data(1,:);
+sigTrue1 = sig_data(i,:);
 
-tic
 
 [U,~,~] = fwd_solver_eit2D(p1,e1,t1,sigTrue1',Ic,body);
-toc
+voltage_data(i, :) = U;
+end
+%%
+
+%%
+save("voltage_data.mat", "voltage_data");
+%%

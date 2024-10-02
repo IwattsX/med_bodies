@@ -17,8 +17,17 @@ e1 = e1_data['e1']  # Edge elements (if needed for your plot)
 
 # Load sigTrue1 from sig_data.mat
 sig_data = loadmat('data/sig_data.mat')
-sigTrue1 = sig_data['sig_data'][0, :]  # Extract the first set of sigTrue1 (or another index)
+results_df = pd.DataFrame()
+for i in range(0, len(sig_data['sig_data'])):
+    sigTrue1 = sig_data['sig_data'][i, :]  # Extract the first set of sigTrue1 (or another index)
 
-# convert to a dataframe to do operations on, such as storing these inside of a dataset
-df = pd.DataFrame(sigTrue1)
-print(df)
+    # convert to a dataframe to do operations on, such as storing these inside of a dataset
+    df = pd.DataFrame(sigTrue1)
+    print(df)
+    results_df = pd.concat([results_df, df], axis=1)
+    
+
+results_df.to_csv("test2.csv", index=False,)
+
+
+
