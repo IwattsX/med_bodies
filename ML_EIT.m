@@ -43,7 +43,7 @@ inArea= 0.3; %0.03; %resistive 1e-8; color values (random)
 outArea= 0.07; %.007;
 
 %% Conductivity distribution
-N = 10;
+N = 1000;
 sig_data = zeros(N,nodes1);
 for i = 1:N
 [sigTrue,sigTrue1] = random_geom(p,p1,inArea,outArea,body);
