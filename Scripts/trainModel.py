@@ -3,6 +3,7 @@ import tensorflow as tf
 import pickle
 import os
 from tensorflow.keras.callbacks import EarlyStopping
+import numpy as np
 
 def save_model_if_updated(model, pickle_path='model.pkl'):
     # Check if the pickle file exists
@@ -56,8 +57,8 @@ model.add(tf.keras.layers.Input(shape=(992,)))
 
 # Add hidden layers (you can adjust the number of layers and neurons)
 # see https://www.kaggle.com/code/dansbecker/rectified-linear-units-relu-in-deep-learning for more details on how it works
-model.add(tf.keras.layers.Dense(256, activation='relu'))  # Hidden layer
-model.add(tf.keras.layers.Dense(128, activation='relu'))  # Hidden layer
+model.add(tf.keras.layers.Dense(256, activation='sigmoid'))  # Hidden layer
+model.add(tf.keras.layers.Dense(128, activation='sigmoid'))  # Hidden layer
 
 # Output layer with 4017 features
 model.add(tf.keras.layers.Dense(4017))  # Output layer
