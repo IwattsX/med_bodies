@@ -74,11 +74,10 @@ model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_absolu
 model.summary()
 
 # A callback to early stop the epochs when the loss and mean_squared_error is good
-early_stop = EarlyStopping(monitor='val_mean_absolute_error', patience=10, restore_best_weights=True)
 
 # Train the model
 # No need to reshape X, it's already in the correct shape
-model.fit(X, Y, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stop])  # Adjust epochs and batch size as needed
+model.fit(X, Y, epochs=50, batch_size=32, validation_split=0.2)  # Adjust epochs and batch size as needed
 
 
 if __name__ == '__main__':
