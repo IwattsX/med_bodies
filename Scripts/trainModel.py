@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import pandas as pd
-import dill as pickle
 import os
 import numpy as np
 
@@ -13,41 +12,16 @@ class SimpleModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(SimpleModel, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)  # Input to hidden layer
-        self.gelu = nn.GELU()  # Activation function
+        self.elu = nn.ELU()  # Activation function
         self.fc2 = nn.Linear(hidden_size, output_size)  # Hidden to output layer
         self.sigmoid = nn.Sigmoid()  # Activation for output layer
 
     def forward(self, x):
         x = self.fc1(x)
-        x = self.gelu(x)
+        x = self.elu(x)
         x = self.fc2(x)
         x = self.sigmoid(x)
         return x
-
-def save_model_if_updated(model, pickle_path='model.pkl'):
-    # Check if the pickle file exists
-    if os.path.exists(pickle_path):
-        # Load the previously saved model
-        with open(pickle_path, 'rb') as file:
-            previous_model = pickle.load(file)
-
-        # Compare weights of current model with previous model
-        current_weights = [param.data.cpu().numpy() for param in model.parameters()]
-        previous_weights = [param.data.cpu().numpy() for param in previous_model.parameters()]
-
-        # If the weights are the same, don't save the model
-        if all(np.array_equal(cw, pw) for cw, pw in zip(current_weights, previous_weights)):
-            print("Model has not changed. No need to pickle.")
-            return
-        else:
-            print("Model has changed. Saving the updated model.")
-    else:
-        print("No previous model found. Saving the model.")
-
-    # Save the model (pickle it)
-    with open(pickle_path, 'wb') as file:
-        pickle.dump(model, file)
-    print("Model saved successfully.")
 
 
 # Load the CSV files
@@ -115,14 +89,5 @@ for epoch in range(epochs):
 
     print(f"Epoch [{epoch + 1}/{epochs}], Loss: {running_loss / len(X_train)}, Validation Loss: {val_loss.item()}")
 
-    # Early stopping logic
-    if val_loss.item() < best_val_loss:
-        best_val_loss = val_loss.item()
-        save_model_if_updated(model=model)
-    else:
-        print("Early stopping: Validation loss did not improve.")
-
-# If running as main, save model
-if __name__ == '__main__':
-    save_model_if_updated(model=model)
+torch.save(model.state_dict(), "model.pth")
 

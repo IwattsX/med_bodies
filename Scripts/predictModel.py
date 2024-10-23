@@ -1,32 +1,22 @@
-import dill as pickle
 import os
 import pandas as pd
 import torch
 from scipy.io import savemat
 
-from trainModel import SimpleModel  # Make sure trainModel is available and SimpleModel is defined
+from trainModel import SimpleModel  # Ensure trainModel is available and SimpleModel is defined
 
 # Check if CUDA is available, otherwise use CPU
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-def load_pickled_model(pickle_path='model.pkl'):
-    if os.path.exists(pickle_path):
-        with open(pickle_path, 'rb') as file:
-            model = pickle.load(file)
-        print("Model loaded successfully.")
-        return model
-    else:
-        print("No pickled model found.")
-        return None
-
-
 # Load the model
-model = load_pickled_model()
+model = SimpleModel(input_size=992, hidden_size=256, output_size=4017)
+model.load_state_dict(torch.load("model.pth", map_location=device))  # Corrected this line to properly load the state dict
 
-# If model is not None, move it to the appropriate device and set it to evaluation mode
-if model is not None:
-    model = model.to(device)
-    model.eval()
+# Move the model to the appropriate device
+model.to(device)
+
+# Set the model to evaluation mode
+model.eval()
 
 # Load the dataset
 input_data = pd.read_csv('dataset/voltageDataset.csv')
@@ -44,11 +34,10 @@ i = 0  # Example: Get the 1st column (you can set it to any column index you wan
 print(f"Column {i}: {X[:, i]}")
 
 # Make a prediction using the model on the entire dataset
-if model is not None:
-    with torch.no_grad():  # Ensure no gradients are calculated during prediction
-        predictions = model(X_tensor)  # Forward pass
-        predictions = predictions.cpu().numpy()  # Move the predictions back to the CPU and convert to numpy
+with torch.no_grad():  # Ensure no gradients are calculated during prediction
+    predictions = model(X_tensor)  # Forward pass
+    predictions = predictions.cpu().numpy()  # Move the predictions back to the CPU and convert to numpy
 
-    # Save the prediction for the i-th column into a .mat file
-    savemat(f"prediction_column_{i}.mat", {'predicted_output': predictions[i]})
-    print(f"Prediction for column {i} saved to prediction_column_{i}.mat")
+# Save the prediction for the i-th column into a .mat file
+savemat(f"prediction_column_{i}.mat", {'predicted_output': predictions[i]})
+print(f"Prediction for column {i} saved to prediction_column_{i}.mat")
