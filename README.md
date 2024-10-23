@@ -1,3 +1,24 @@
+# How to run the training/predictions
+1) Create a conda environment
+```
+conda env create -f environment.yml
+```
+2) Change directory into Scripts
+```
+cd Scripts/
+```
+3) Training/Prediction
+
+This will train from the csv inside of the dataset csv files
+```
+python3 trainModel.py
+```
+
+This will do an evaluation by loading the model and placing it in evaluation mode
+```
+python3 predictModel.py
+```
+
 # Medical Bodies
 Taking in circular meshes (medical bodies), getting voltage data from the electrodes, and simulating the medical body back using AI/ML techniques with the voltages. 
 
