@@ -24,11 +24,12 @@ el = body.el;
 radius = rand*el/.95 % size of the inclusion
 
 
-r = rand * (rc - radius)*0.9; % Random distance from the center, ensuring the small circle stays within the larger one
-theta = rand * 2 * pi; % Random angle
+r = (0.5 + 0.5 * rand) * (rc - radius) * 0.9; % Random distance from the center, ensuring the small circle stays within the larger one
+theta = (0.5 + 0.5 * rand) * 2 * pi; % Random angle
 x_random = r * cos(theta); % X-coordinate of the random center
 y_random = r * sin(theta); % Y-coordinate of the random center
-center1 = [x_random, y_random]
+center1 = [x_random, y_random];
+
 
 % radius = 0.012;
 
