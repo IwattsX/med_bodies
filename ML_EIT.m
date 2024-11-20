@@ -23,6 +23,7 @@ hval = 0.15;%0.15; %0.03; %0.2; 0.1: works for 32 electrode
 
 % Create mesh
 [p,e,t]=initmesh(dl,'hmax',hval); % create the mesh
+
 [p,e,t]=refinemesh(dl,p,e,t); % coarser mesh
 nodes=length(p);
 [p1,e1,t1]=refinemesh(dl,p,e,t); % finer mesh
@@ -35,9 +36,9 @@ body.zl = 1.2;
 nodes1=length(p1);
 tris=length(t1);
 
-sigTrue=ones(nodes,1); %sigma at refined mesh 
+sigTrue=ones(nodes,1); %sigma at coarse mesh 
 % sig = ones(nodes,1) + i 0.001.*ones(nodes,1);
-sigTrue1=ones(nodes1,1); % sigma at coarser mesh
+sigTrue1=ones(nodes1,1); % sigma at finer mesh
 
 inArea= 0.3; %0.03; %resistive 1e-8; color values (random)
 outArea= 0.07; %.007;
@@ -48,13 +49,17 @@ sig_data = zeros(N,nodes1);
 for i = 1:N
 [sigTrue,sigTrue1] = random_geom(p,p1,inArea,outArea,body);
 sig_data(i,:) = sigTrue1;
+sig_data_coarse(i,:) = sigTrue;
 % sig0_fine = outArea.*ones(nodes1,1); % homogeneous conductivity
 % sig0_coarse = outArea.*ones(nodes,1); % homogeneous conductivity
 % figure;pdeplot(p1,e1,t1,'xydata',sigTrue1,'mesh','off');colormap(jet);pause
 % close all;
 end
 %%
-single_data.sig = sig_data;
+figure;pdeplot(p1,e1,t1,'xydata',sigTrue1,'mesh','on');colormap(jet);
+figure;pdeplot(p,e,t,'xydata',sigTrue,'mesh','on');colormap(jet);
+%%
+single_data.sig = sig_data_coarse;
 
 save('sig_data.mat',"sig_data")
 load('sig_data.mat')
