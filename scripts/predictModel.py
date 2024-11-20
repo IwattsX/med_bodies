@@ -1,43 +1,58 @@
+import argparse
 import os
 import pandas as pd
 import torch
 from scipy.io import savemat
 
-from trainModel import SimpleModel  # Ensure trainModel is available and SimpleModel is defined
+from NNModel import SimpleModel
 
-# Check if CUDA is available, otherwise use CPU
+# Argument parser
+parser = argparse.ArgumentParser(
+    prog=__name__,
+    description='Puts the model into prediction mode'
+)
+parser.add_argument("--input", required=True, help="The input data for voltage data .csv")
+parser.add_argument("--output", required=True, help="The output dataset that contains predictions .mat")
+parser.add_argument("--model", required=True, help="Path to the trained model file (.pth)")
+
+args = parser.parse_args()
+
+input_file = args.input
+output_file = args.output
+
+# Validate input file
+if not os.path.isfile(input_file):
+    raise FileNotFoundError(f"Input file '{input_file}' not found.")
+    
+# Validate model file
+if not os.path.isfile(args.model):
+    raise FileNotFoundError(f"Model file '{args.model}' not found.")
+
+# Create output directory if needed
+output_dir = os.path.dirname(output_file)
+if output_dir and not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# Device setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Load the model
 model = SimpleModel(input_size=992, hidden_size=256, output_size=4017)
-model.load_state_dict(torch.load("model.pth", map_location=device))  # Corrected this line to properly load the state dict
-
-# Move the model to the appropriate device
+model.load_state_dict(torch.load(args.model, map_location=device))
 model.to(device)
-
-# Set the model to evaluation mode
 model.eval()
 
 # Load the dataset
-input_data = pd.read_csv('dataset/voltageDataset.csv')
+input_data = pd.read_csv(input_file)
 
-# Transpose the data (if needed, you can remove the transpose if your data is already organized by columns)
-X = input_data.values.T
-
-# Convert the input data to a PyTorch tensor and move it to the correct device
+# Convert to tensor
+X = input_data.values.T  # Transpose if necessary
 X_tensor = torch.tensor(X, dtype=torch.float32).to(device)
 
-# Specify the index of the column you want to inspect (adjust i to your desired column number)
-i = 0  # Example: Get the 1st column (you can set it to any column index you want)
+# Prediction
+with torch.no_grad():
+    predictions = model(X_tensor).cpu().numpy()
 
-# Print the i-th column for testing
-print(f"Column {i}: {X[:, i]}")
-
-# Make a prediction using the model on the entire dataset
-with torch.no_grad():  # Ensure no gradients are calculated during prediction
-    predictions = model(X_tensor)  # Forward pass
-    predictions = predictions.cpu().numpy()  # Move the predictions back to the CPU and convert to numpy
-
-# Save the prediction for the i-th column into a .mat file
-savemat(f"prediction_column_{i}.mat", {'predicted_output': predictions[i]})
-print(f"Prediction for column {i} saved to prediction_column_{i}.mat")
+# Save predictions
+savemat(output_file, {'predicted_output': predictions})
+print(f"Predictions saved to {output_file}")

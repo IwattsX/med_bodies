@@ -7,6 +7,8 @@ import pandas as pd
 import os
 import numpy as np
 
+from NNModel import SimpleModel
+
 parser = argparse.ArgumentParser(
     prog=__name__,
     description='Trains a model using the csv files in the dataset'
@@ -25,22 +27,6 @@ model_file = args.model_path
 
 # Check if CUDA is available, otherwise use CPU
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-class SimpleModel(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
-        super(SimpleModel, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size)  # Input to hidden layer
-        self.elu = nn.ELU()  # Activation function
-        self.fc2 = nn.Linear(hidden_size, output_size)  # Hidden to output layer
-        self.sigmoid = nn.Sigmoid()  # Activation for output layer
-
-    def forward(self, x):
-        x = self.fc1(x)
-        x = self.elu(x)
-        x = self.fc2(x)
-        x = self.sigmoid(x)
-        return x
-
 
 # Load the CSV files
 input_data = pd.read_csv(file_input)

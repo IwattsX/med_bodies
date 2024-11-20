@@ -11,7 +11,7 @@ cd Scripts/
 
 This will train from the csv inside of the dataset csv files
 ```
-python3 trainModel.py
+python trainModel.py --input dataset/voltageDataset.csv --output dataset/datasetTrainSigData.csv --model_path data/model1.pth
 ```
 
 This will do an evaluation by loading the model and placing it in evaluation mode
