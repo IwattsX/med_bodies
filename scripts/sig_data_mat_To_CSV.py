@@ -37,8 +37,8 @@ e1 = e1_data['e1']  # Edge elements (if needed for your plot)
 # Load sigTrue1 from sig_data.mat
 sig_data = loadmat(file_input)
 results_df = pd.DataFrame()
-for i in range(0, len(sig_data['sig_data'])):
-    sigTrue1 = sig_data['sig_data'][i, :]  # Extract the first set of sigTrue1 (or another index)
+for i in range(0, len(sig_data['sig_data_coarse'])):
+    sigTrue1 = sig_data['sig_data_coarse'][i, :]  # Extract the first set of sigTrue1 (or another index)
 
     # convert to a dataframe to do operations on, such as storing these inside of a dataset
     df = pd.DataFrame(sigTrue1)

@@ -37,7 +37,7 @@ if output_dir and not os.path.exists(output_dir):
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Load the model
-model = SimpleModel(input_size=992, hidden_size=256, output_size=4017)
+model = SimpleModel(input_size=992, hidden_size=256, output_size=1029)
 model.load_state_dict(torch.load(args.model, map_location=device))
 model.to(device)
 model.eval()

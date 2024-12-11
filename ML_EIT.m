@@ -65,6 +65,7 @@ save('sig_data.mat',"sig_data")
 load('sig_data.mat')
 %%
 
+save("sig_data_course.mat","sig_data_coarse")
 %%
 voltage_data = zeros(N,992);
 for i = 1:N

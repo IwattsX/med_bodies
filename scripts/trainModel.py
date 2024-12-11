@@ -45,7 +45,7 @@ print("Input shape:", X.shape)  # Should be (992, 1000) => n_samples = 1000
 print("Output shape:", Y.shape)  # Should be (1000, 4017)
 
 # Define the model and move it to the appropriate device (CPU or GPU)
-model = SimpleModel(input_size=992, hidden_size=256, output_size=4017).to(device)
+model = SimpleModel(input_size=992, hidden_size=256, output_size=1029).to(device)
 
 # Define loss function and optimizer
 criterion = nn.MSELoss()  # Mean Squared Error Loss
