@@ -46,6 +46,8 @@ outArea= 0.07; %.007;
 %% Conductivity distribution
 N = 1000;
 sig_data = zeros(N,nodes1);
+%% sig_data_coarse = zeros(N, nodes1);
+
 for i = 1:N
 [sigTrue,sigTrue1] = random_geom(p,p1,inArea,outArea,body);
 sig_data(i,:) = sigTrue1;
@@ -61,11 +63,11 @@ figure;pdeplot(p,e,t,'xydata',sigTrue,'mesh','on');colormap(jet);
 %%
 single_data.sig = sig_data_coarse;
 
-save('sig_data.mat',"sig_data")
-load('sig_data.mat')
+save('data/sig_data.mat',"sig_data")
+load('data/sig_data.mat')
 %%
 
-save("sig_data_course.mat","sig_data_coarse")
+save("data/sig_data_course.mat","sig_data_coarse")
 %%
 voltage_data = zeros(N,992);
 for i = 1:N
@@ -80,5 +82,5 @@ end
 %%
 
 %%
-save("voltage_data.mat", "voltage_data");
+save("data/voltage_data.mat", "voltage_data");
 %%

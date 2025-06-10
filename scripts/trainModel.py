@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("--input", required=True, help="The input data for voltage data")
 parser.add_argument("--output", required=True, help="The output dataset that it is training against")
-parser.add_argument("--model_path", default=".model.pth", help="The output of where the model is saved")
+parser.add_argument("--model_path", default="model.pth", help="The output of where the model is saved")
 
 args = parser.parse_args()
 
@@ -34,7 +34,7 @@ output_data = pd.read_csv(file_output)
 
 # Convert to numpy arrays and transpose
 X = input_data.values.T  # Shape: (n_samples, 992)
-Y = output_data.values.T  # Shape: (n_samples, 4017)
+Y = output_data.values.T  # Shape: (n_samples, 1029)
 
 # Convert data to PyTorch tensors
 X = torch.tensor(X, dtype=torch.float32).to(device)
@@ -42,7 +42,7 @@ Y = torch.tensor(Y, dtype=torch.float32).to(device)
 
 # Check the shapes of X and Y
 print("Input shape:", X.shape)  # Should be (992, 1000) => n_samples = 1000
-print("Output shape:", Y.shape)  # Should be (1000, 4017)
+print("Output shape:", Y.shape)  # Should be (1000, 1029)
 
 # Define the model and move it to the appropriate device (CPU or GPU)
 model = SimpleModel(input_size=992, hidden_size=256, output_size=1029).to(device)
